@@ -1,20 +1,21 @@
+// Importing required modules and components
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-// import data from '../env.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { GLOBAL_CONFIG } from '../components/global_config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const JoinClass = () => {
+    // State variables to manage class ID, username, and loading state
     const [classId, setClassId] = useState('');
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
 
-    
-
+    // Function to handle joining a class
     const join = async () => {
-       const userId = await AsyncStorage.getItem('uname');
-        console.log("UserID",userId);
+        const userId = await AsyncStorage.getItem('uname');
+        console.log("UserID", userId);
         console.log("Trying to join a class");
         if (!classId || !username) {
             Alert.alert('Error', 'Please enter all fields!');
@@ -22,34 +23,35 @@ const JoinClass = () => {
         }
         console.log("Trying to join a class");
         setLoading(true);
-        let course=classId;
-        let user=userId;
+        let course = classId;
+        let user = userId;
         const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/api/Attendance/Admin`, {
             course,
             user,
         });
-        console.log("response admin",response);
-        if(!response.data.admin){
-        try {
-            console.log("not admin and Trying to join a class");
-            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/joinClass/join`, {
-                classId, username, userId
-            });
-            console.log(response.data);
-            if(!response.data.data){
-                Alert.alert('Error', 'You are already part of the class!');
+        console.log("response admin", response);
+        if (!response.data.admin) {
+            try {
+                console.log("not admin and Trying to join a class");
+                const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/joinClass/join`, {
+                    classId, username, userId
+                });
+                console.log(response.data);
+                if (!response.data.data) {
+                    Alert.alert('Error', 'You are already part of the class!');
+                    setClassId('');
+                    setUsername('');
+                    return;
+                }
+                Alert.alert('Success', 'You have successfully joined the class!');
                 setClassId('');
                 setUsername('');
-            return;  }
-            Alert.alert('Success', 'You have successfully joined the class!');
-            setClassId('');
-            setUsername('');
-        } catch (error) {
-            Alert.alert('Error', 'Unable to join the class. Please try again.');
-        } finally {
-            setLoading(false);
-        }}
-        else{
+            } catch (error) {
+                Alert.alert('Error', 'Unable to join the class. Please try again.');
+            } finally {
+                setLoading(false);
+            }
+        } else {
             Alert.alert(`You are admin of this course ${classId}`);
             setClassId('');
             setUsername('');
@@ -57,7 +59,6 @@ const JoinClass = () => {
     };
 
     return (
-
         <View style={styles.container}>
             <Text style={styles.title}>Join Classroom</Text>
 
@@ -89,15 +90,14 @@ const JoinClass = () => {
                 </View>
             </View>
 
-
-           <TouchableOpacity style={styles.button} onPress={join}>
-                   <Text style={styles.buttonText}>Join</Text>
-                 </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={join}>
+                <Text style={styles.buttonText}>Join</Text>
+            </TouchableOpacity>
         </View>
-
     );
 };
 
+// Styles for the component
 const styles = StyleSheet.create({
     container: {
         flex: 1,

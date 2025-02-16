@@ -1,37 +1,42 @@
+// Importing required modules and components
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, View, LogBox, Keyboard, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GLOBAL_CONFIG } from '../components/global_config';
 
-
-
 export default function NoticeBoard({ navigation, route }) {
+    // State variables to manage notices, message, and user ID
     const [notices, setNotices] = useState([]);
     const admin = route.params.admin;
     const course = route.params.course;
-    console.log(admin.admin);
     const [message, setMessage] = useState('');
     const [userId, setUserId] = useState('');
+    const flatListRef = useRef(null);
+
+    // Ignore specific log warnings
     LogBox.ignoreLogs([
         'VirtualizedLists should never be nested',
     ]);
 
+    // Fetch notices and user ID when the component mounts
     useEffect(() => {
         fetchNotices();
         getUserId();
     }, []);
 
+    // Fetch notices at regular intervals
     useEffect(() => {
         fetchNotices(); // Initial fetch
 
         const interval = setInterval(() => {
-            fetchNotices(); // Fetch messages every 5 seconds
+            fetchNotices(); // Fetch messages every second
         }, 1000);
 
         return () => clearInterval(interval); // Cleanup interval when component unmounts
     }, []);
 
+    // Function to get user ID from AsyncStorage
     const getUserId = async () => {
         try {
             const storedUserId = await AsyncStorage.getItem('uname');
@@ -41,6 +46,7 @@ export default function NoticeBoard({ navigation, route }) {
         }
     };
 
+    // Function to fetch notices from the backend
     const fetchNotices = async () => {
         try {
             const response = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/api/notices/${course}`);
@@ -50,6 +56,7 @@ export default function NoticeBoard({ navigation, route }) {
         }
     };
 
+    // Function to post a new notice
     const postNotice = async () => {
         if (!message.trim()) {
             Alert.alert("Error", "Message cannot be empty!");
@@ -74,8 +81,6 @@ export default function NoticeBoard({ navigation, route }) {
             Alert.alert("Error", "Unable to post message.");
         }
     };
-
-    const flatListRef = useRef(null);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -125,6 +130,8 @@ export default function NoticeBoard({ navigation, route }) {
         </SafeAreaView>
     );
 }
+
+// Styles for the component
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -194,7 +201,8 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontWeight: 'bold',
-    }, userNotice: {
+    },
+    userNotice: {
         backgroundColor: '#D4BEE4',  // Normal user messages (light gray)
     },
     adminNotice: {

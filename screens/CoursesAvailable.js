@@ -1,3 +1,4 @@
+// Importing required modules and components
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,10 +8,12 @@ import CourseDetailsToJoin from '../components/CourseDetailsToJoin';
 import { GLOBAL_CONFIG } from '../components/global_config';
 
 const CoursesAvailable = () => {
+    // State variables to manage courses, loading state, and error state
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Function to fetch courses from the backend
     const fetchCourses = () => {
         axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/coursesAvailable`)
             .then((response) => {
@@ -21,15 +24,16 @@ const CoursesAvailable = () => {
                 setError(err.message);
                 setLoading(false);
             });
-
     };
 
+    // Fetch courses when the screen is focused
     useFocusEffect(
         React.useCallback(() => {
             fetchCourses();
         }, [])
     );
 
+    // Display loading indicator while fetching data
     if (loading) {
         return (
             <View style={styles.centered}>
@@ -39,6 +43,7 @@ const CoursesAvailable = () => {
         );
     }
 
+    // Display error message if there is an error fetching data
     if (error) {
         return (
             <View style={styles.centered}>
@@ -47,6 +52,7 @@ const CoursesAvailable = () => {
         );
     }
 
+    // Display the list of available courses
     return (
         <View style={styles.container}>
             {courses.length > 0 ? (
@@ -67,11 +73,11 @@ const CoursesAvailable = () => {
             )}
         </View>
     );
-
 };
 
 export default CoursesAvailable;
 
+// Styles for the component
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -82,8 +88,22 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         paddingHorizontal: 16,
     },
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 16,
+        color: '#6C757D',
+    },
+    errorText: {
+        fontSize: 16,
+        color: '#DC3545',
+    },
     noCoursesContainer: {
-        flex: 1,  // Ensure full height
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
