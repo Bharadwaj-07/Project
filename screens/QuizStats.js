@@ -13,7 +13,7 @@ export default function QuizStats({ navigation, route }) {
         fetchQuizStats();
     }, []);
 
-    // Fetch quiz statistics from the server
+        // Fetch quiz statistics from the server
     const fetchQuizStats = async () => {
         try {
             const url = `http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/quiz/${courseId}/${quizNumber}`;
