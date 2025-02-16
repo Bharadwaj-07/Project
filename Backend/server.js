@@ -3,15 +3,26 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const ProfileRoutes=require('./routes/ProfileRouter');
-const AttendanceRoutes=require('./routes/AttendanceRouter');
+const AttendanceRoutes=require('./Routes/AttendanceRouter');
 const cookieParser = require('cookie-parser');
 
 
-const QuizRouter=require("./routes/QuizRouter")
-const App = express();
 
 
 import { GLOBAL_CONFIG } from "../components/global_config";
+
+
+const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
+const CreateClassRouter = require('./routes/CreateClassRouter')
+const JoinClassRouter = require('./routes/JoinClassRoute');
+const marksRouter = require('./routes/MarksRouter')
+const QuizRouter=require("./routes/QuizRouter")
+const App = express();
+const noticeRoutes = require('./routes/noticeRoutes');
+const DetailsRoutes = require('./routes/DetailsRouter');
+const maxMarksRoutes = require("./routes/MaxMarksRouter");
+
+
 
 // Middleware
 App.use(cors({
@@ -52,7 +63,9 @@ App.use('/api/Attendance', AttendanceRoutes)
 App.use("/maxmarks", maxMarksRoutes);
 App.use('/api/notices', noticeRoutes);
 App.use('/details',DetailsRoutes);
+
 const PORT = GLOBAL_CONFIG.PORT;
+
 App.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
