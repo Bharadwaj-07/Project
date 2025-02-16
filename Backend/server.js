@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser');
 import { GLOBAL_CONFIG } from "../components/global_config";
 
 
-const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
+// const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
 const CreateClassRouter = require('./routes/CreateClassRouter')
 const JoinClassRouter = require('./routes/JoinClassRoute');
 const marksRouter = require('./routes/MarksRouter')
@@ -28,11 +28,11 @@ const maxMarksRoutes = require("./routes/MaxMarksRouter");
 
 
 const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
-const CreateClassRouter = require('./routes/CreateClassRouter')
-const JoinClassRouter = require('./routes/JoinClassRoute');
-const noticeRoutes = require('./routes/noticeRoutes');
+// const CreateClassRouter = require('./routes/CreateClassRouter')
+// const JoinClassRouter = require('./routes/JoinClassRoute');
+// const noticeRoutes = require('./routes/noticeRoutes');
 
-import { GLOBAL_CONFIG } from "../components/global_config";
+// import { GLOBAL_CONFIG } from "../components/global_config";
 
 
 
