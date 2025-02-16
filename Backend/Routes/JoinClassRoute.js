@@ -1,26 +1,63 @@
 const express = require('express');
-const router = express.Router();
-const JoinClass = require('../models/JoinClassModel');
-const Profile = require('../models/Profile');
-const CourseModel = require('../models/Course');
-const MarksModel = require('../models/MarksModel');
-const Class = require('../models/ClassModel');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const ProfileRoutes=require('./routes/ProfileRouter');
+const AttendanceRoutes=require('./routes/AttendanceRouter');
+const cookieParser = require('cookie-parser');
 
-// Function to join a class
-const joinClass = async (req, res) => {
-    const { classId, studentId } = req.body;
+const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
+const CreateClassRouter = require('./routes/CreateClassRouter')
+const JoinClassRouter = require('./routes/JoinClassRoute');
+const marksRouter = require('./routes/MarksRouter')
+const QuizRouter=require("./routes/QuizRouter")
+const App = express();
+const noticeRoutes = require('./routes/noticeRoutes');
+const DetailsRoutes = require('./routes/DetailsRouter');
+const maxMarksRoutes = require("./routes/MaxMarksRouter");
 
-    try {
-        const classToJoin = await Class.findById(classId);
-        classToJoin.students.push(studentId);
-        await classToJoin.save();
-        res.status(200).json({ message: 'Joined class successfully', class: classToJoin });
-    } catch (err) {
-        res.status(400).json({ message: 'Error joining class', error: err.message });
-    }
+
+// Middleware
+App.use(cors({
+  origin: 'http://localhost:8081',
+  credentials: true,
 }
+));
 
-// Route to join a class
-router.post('/join', joinClass);
+App.use(express.json());
+App.use(cookieParser());
 
-module.exports = router;
+
+mongoose
+    .connect("mongodb://127.0.0.1:27017/DB", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => {
+        console.log('Connected to MongoDB successfully!');
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error.message);
+    });
+
+const conn = mongoose.connection;
+conn.on("error", (err) => console.error.bind(console, "DB connection error"));
+conn.once('open', () => { console.log("Connected to DataBase.") });
+
+
+App.use('/api/Users', ProfileRoutes)
+
+App.use('/coursesAvailable', coursesAvailableRouter.router);
+App.use('/createClass', CreateClassRouter);
+App.use('/joinClass', JoinClassRouter);
+App.use('/marks', marksRouter);
+App.use('/quiz',QuizRouter);
+App.use('/api/Attendance', AttendanceRoutes)
+App.use("/maxmarks", maxMarksRoutes);
+App.use('/api/notices', noticeRoutes);
+App.use('/details',DetailsRoutes);
+const GLOBAL_CONFIG = require('./global_config');
+const PORT =GLOBAL_CONFIG.PORT;
+App.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

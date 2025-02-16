@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const ProfileRoutes=require('./routes/ProfileRouter');
+const ProfileRoutes=require('./Routes/ProfileRouter');
 const AttendanceRoutes=require('./Routes/AttendanceRouter');
 const cookieParser = require('cookie-parser');
 
 
+const GLOBAL_CONFIG = require('./global_config');
 
 
-import { GLOBAL_CONFIG } from "../components/global_config";
 
 
 // const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')

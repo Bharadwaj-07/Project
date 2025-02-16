@@ -1,6 +1,6 @@
 // Importing required modules
 const express = require('express');
-const Notice = require('../models/NoticeModel');
+const Notice = require('../models/Notice');
 
 const router = express.Router();
 
