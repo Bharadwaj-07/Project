@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
 const ProfileRoutes=require('./routes/ProfileRouter');
 const AttendanceRoutes=require('./Routes/AttendanceRouter');
 const cookieParser = require('cookie-parser');
@@ -21,6 +22,17 @@ const App = express();
 const noticeRoutes = require('./routes/noticeRoutes');
 const DetailsRoutes = require('./routes/DetailsRouter');
 const maxMarksRoutes = require("./routes/MaxMarksRouter");
+
+
+
+
+
+const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
+const CreateClassRouter = require('./routes/CreateClassRouter')
+const JoinClassRouter = require('./routes/JoinClassRoute');
+const noticeRoutes = require('./routes/noticeRoutes');
+
+import { GLOBAL_CONFIG } from "../components/global_config";
 
 
 
